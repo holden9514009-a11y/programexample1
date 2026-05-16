@@ -5,136 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3학년 OO반 좌석 매칭 시스템</title>
     <style>
+        /* 🎨 나무 테마 디자인 (CSS) */
+        @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
         :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #f5f7fa;
-            --border-color: #cbd5e1;
+            --bg-color: #f7f5f0;          /* 따뜻한 베이지빛 크림색 배경 */
+            --card-bg: #ffffff;           /* 카드 내부 화이트 */
+            --text-main: #4a3b32;         /* 짙은 브라운 글자색 (눈이 편안한 정돈된 톤) */
+            --text-muted: #8a7a71;        /* 부연 설명 글자색 */
+            
+            /* 🪵 나무 테마 포인트 컬러 */
+            --primary: #8c6239;           /* 따뜻한 원목 브라운 (메인 버튼 및 강조) */
+            --primary-hover: #6f4e2c;     
+            --seat-default: #fffdf9;      /* 기본 좌석 배경 (밝은 아이보리) */
+            --seat-border: #e6dfd5;       /* 기본 좌석 테두리 */
+            --seat-select: #d7ccc8;       /* 좌석 선택 시 (부드러운 라떼 색상) */
+            --success: #e28743;           /* 배정 완료 (따뜻한 오렌지 브라운) */
+            --danger: #e07a5f;            /* 초기화 버튼 (차분한 테라코타 레드) */
+            
+            --border-radius: 16px;        /* 둥글둥글한 느낌을 주는 라운드 값 */
+            --shadow: 0 10px 20px rgba(140, 98, 57, 0.05), 0 3px 6px rgba(0, 0, 0, 0.03);
         }
 
         body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: var(--secondary-color);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        h1 { color: #334155; margin-bottom: 5px; }
-        p { color: #64748b; margin-top: 0; margin-bottom: 20px; }
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #5c3a21; /* 타이틀에 깊은 원목 색상 적용 */
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 35px;
+            text-align: center;
+        }
 
         .container {
             display: flex;
             gap: 30px;
-            max-width: 1200px;
+            max-width: 1100px;
             width: 100%;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: flex-start;
         }
 
+        /* 카드 서식 (입력창 서식과 배치도 감싸는 상자) */
         .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
             flex: 1;
-            min-width: 320px;
+            min-width: 340px;
+            border: 1px solid rgba(230, 223, 213, 0.5);
         }
 
+        /* 🪵 교탁/칠판 디자인: 단단한 통원목 느낌 */
         .teacher-desk {
-            width: 200px;
-            height: 40px;
-            background: #94a3b8;
-            color: white;
+            width: 60%;
+            height: 45px;
+            background: linear-gradient(135deg, #6f4e2c, #4a321a);
+            color: #f7f5f0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            border-radius: 4px;
-            margin: 0 auto 20px auto;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 30px; /* 알약 모양으로 부드럽게 */
+            margin: 0 auto 30px auto;
+            box-shadow: 0 4px 10px rgba(74, 50, 26, 0.2);
+            letter-spacing: 2px;
         }
 
-        /* 5열 6행 그리드 배치 */
+        /* 5열 6행 그리드 */
         .classroom-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
+        /* 🪵 기본 좌석 스타일: 빈 책상 느낌 */
         .seat {
-            aspect-ratio: 1.2;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
+            aspect-ratio: 1.1;
+            border: 2px dashed var(--seat-border); /* 기본 상태는 점선으로 부드럽게 */
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-            background: white;
+            background-color: var(--seat-default);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        .seat:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            background-color: #fdfbf7;
+        }
+
+        /* 🪵 학생이 지망을 선택했을 때: 라떼/소프트 브라운 톤 */
         .seat.selected {
-            background-color: #e0f2fe;
-            border-color: var(--primary-color);
-            color: var(--primary-color);
+            border-style: solid;
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f5ebe0, #e3d5ca);
+            color: var(--primary);
+            box-shadow: 0 4px 12px rgba(140, 98, 57, 0.15);
         }
 
-        .seat-num { font-size: 11px; color: #94a3b8; margin-bottom: 2px; }
+        .seat-num {
+            font-size: 11px;
+            color: #b5a69e;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
 
+        .student-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        /* 입력 폼 서식 */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #334155;}
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #5c4d43;
+            font-size: 14px;
+        }
+
         input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            padding: 14px;
+            border: 2px solid #e6dfd5;
+            border-radius: 12px;
             box-sizing: border-box;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+            background-color: #faf9f6;
+            color: var(--text-main);
         }
 
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(140, 98, 57, 0.15);
+        }
+
+        #selectedSequence {
+            font-size: 13px;
+            color: var(--primary);
+            background: #f5ebe0;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* 버튼 공통 스타일 */
         button {
             width: 100%;
-            padding: 12px;
-            background: var(--primary-color);
+            padding: 14px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(140, 98, 57, 0.2);
         }
 
-        button:hover { background: #3b82f6; }
-        button.reset-btn { background: #ef4444; margin-top: 10px;}
-        button.reset-btn:hover { background: #dc2626; }
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(140, 98, 57, 0.3);
+        }
 
-        .student-list {
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* 초기화 버튼 (차분하고 부드러운 붉은 벽돌색) */
+        button.reset-btn {
+            background: #f2e9e1;
+            color: #bc4749;
+            box-shadow: none;
             margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            font-size: 14px;
             padding: 10px;
         }
-        .student-item {
-            padding: 5px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 14px;
+        button.reset-btn:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 4px 12px rgba(224, 122, 95, 0.2);
         }
 
-        /* 최종 배치도 스타일 */
+        /* 등록된 학생 명단 상자 */
+        h3 {
+            font-size: 16px;
+            color: #5c4d43;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .student-list {
+            background-color: #faf9f6;
+            border: 1px solid #e6dfd5;
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .student-item {
+            padding: 8px 6px;
+            border-bottom: 1px solid #f2e9e1;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 🎉 최종 배정 완료된 좌석 스타일: 따뜻한 황금빛 오크 나무 테마 */
         .assigned {
-            background-color: #f0fdf4 !important;
-            border-color: #22c55e !important;
-            color: #166534 !important;
+            border-style: solid !important;
+            background: linear-gradient(135deg, #f7d6b5, #e28743) !important;
+            border-color: #bd6320 !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(226, 135, 67, 0.25);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .assigned .seat-num {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+
+        /* 배정 완료 시 뿅! 하고 나타나는 부드러운 애니메이션 */
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 반응형 모바일 대응 */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .card {
+                width: 100%;
+                box-sizing: border-box;
+            }
         }
     </style>
 </head>
@@ -153,14 +299,14 @@
             
             <div class="form-group">
                 <label>희망 좌석 선택 (오른쪽 배치도에서 순서대로 5개 클릭)</label>
-                <div id="selectedSequence" style="font-size: 14px; color: var(--primary-color); font-weight: bold; min-height: 20px;">
+                <div id="selectedSequence">
                     선택된 지망: 없음
                 </div>
             </div>
 
             <button onclick="addStudent()">학생 정보 등록</button>
             
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+            <hr style="border: 0; border-top: 1px solid var(--seat-border); margin: 20px 0;">
             
             <h3>등록된 학생 명단 (<span id="studentCount">0</span>명)</h3>
             <div class="student-list" id="studentList"></div>
@@ -172,47 +318,50 @@
         <div class="card" style="max-width: 600px;">
             <div class="teacher-desk">칠 판 (교탁)</div>
             <div class="classroom-grid" id="classroomGrid"></div>
-            <button onclick="startAssignment()" style="background: #22c55e;">랜덤 좌석 배정 시작! 🎲</button>
+            <button onclick="startAssignment()" style="background: var(--success); box-shadow: 0 4px 12px rgba(226, 135, 67, 0.2);">랜덤 좌석 배정 시작! 🎲</button>
         </div>
     </div>
 
     <script>
+        // 🧠 좌석 매칭 알고리즘 (JavaScript)
         const ROWS = 6;
         const COLS = 5;
-        let students = [];
-        let currentPreferences = [];
+        const TOTAL_SEATS = ROWS * COLS;
 
-        // 화면 로드 시 5x6 좌석 배치도 생성
+        let students = []; 
+        let currentPreferences = []; 
+
         function createGrid() {
             const grid = document.getElementById('classroomGrid');
             grid.innerHTML = '';
+            
             for (let r = 1; r <= ROWS; r++) {
                 for (let c = 1; c <= COLS; c++) {
                     const seatId = `${r}-${c}`;
                     const seat = document.createElement('div');
                     seat.className = 'seat';
                     seat.id = `seat-${seatId}`;
-                    seat.innerHTML = `<span class="seat-num">${r}행 ${c}열</span><span class="student-name"></span>`;
+                    
+                    seat.innerHTML = `
+                        <span class="seat-num">${r}행 ${c}열</span>
+                        <span class="student-name"></span>
+                    `;
                     seat.onclick = () => selectSeat(seatId);
                     grid.appendChild(seat);
                 }
             }
         }
 
-        // 좌석 클릭 시 지망 선택 로직
         function selectSeat(seatId) {
-            // 이미 최종 배정이 완료된 상태면 클릭 막기
-            if(students.some(s => s.assignedSeat)) return; 
+            if (students.length > 0 && students[0].assignedSeat) return;
 
             const index = currentPreferences.indexOf(seatId);
             const seatElement = document.getElementById(`seat-${seatId}`);
 
             if (index > -1) {
-                // 이미 선택한 좌석을 다시 누르면 취소
                 currentPreferences.splice(index, 1);
                 seatElement.classList.remove('selected');
             } else {
-                // 5개까지만 선택 가능
                 if (currentPreferences.length >= 5) {
                     alert('희망 좌석은 최대 5개까지만 선택할 수 있습니다.');
                     return;
@@ -223,18 +372,16 @@
             updatePreferenceText();
         }
 
-        // 지망 순서 텍스트 업데이트
         function updatePreferenceText() {
             const textDiv = document.getElementById('selectedSequence');
-            if(currentPreferences.length === 0) {
+            if (currentPreferences.length === 0) {
                 textDiv.innerText = "선택된 지망: 없음";
             } else {
-                const formatted = currentPreferences.map((id, i) => `${i+1}지망: ${id.split('-')[0]}행 ${id.split('-')[1]}열`).join(' | ');
+                const formatted = currentPreferences.map((id, i) => `${i + 1}지망: ${id.split('-')[0]}행 ${id.split('-')[1]}열`).join(' | ');
                 textDiv.innerText = formatted;
             }
         }
 
-        // 학생 등록
         function addStudent() {
             const nameInput = document.getElementById('studentName');
             const name = nameInput.value.trim();
@@ -243,23 +390,25 @@
                 alert('학생 이름을 입력해주세요.');
                 return;
             }
-            if (currentPreferences.length < 5) {
-                alert('희망 좌석을 5개 모두 선택해주세요.');
+            if (students.some(s => s.name === name)) {
+                alert('이미 등록된 학생 이름입니다.');
                 return;
             }
-            if (students.length >= ROWS * COLS) {
-                alert('교실 좌석 수(30명)를 초과하여 등록할 수 없습니다.');
+            if (currentPreferences.length < 5) {
+                alert('희망 좌석을 5개 모두 선택해야 등록할 수 있습니다.');
+                return;
+            }
+            if (students.length >= TOTAL_SEATS) {
+                alert(`교실 좌석 수(${TOTAL_SEATS}명)를 초과하여 등록할 수 없습니다.`);
                 return;
             }
 
-            // 학생 데이터 저장
             students.push({
                 name: name,
-                preferences: [...currentPreferences],
+                preferences: [...currentPreferences], 
                 assignedSeat: null
             });
 
-            // 입력 폼 초기화 및 격자 스타일 리셋
             nameInput.value = '';
             currentPreferences = [];
             updatePreferenceText();
@@ -268,20 +417,20 @@
             updateStudentList();
         }
 
-        // 등록된 명단 업데이트
         function updateStudentList() {
             document.getElementById('studentCount').innerText = students.length;
             const listDiv = document.getElementById('studentList');
             listDiv.innerHTML = '';
+            
             students.forEach(s => {
                 const item = document.createElement('div');
                 item.className = 'student-item';
-                item.innerText = `${s.name} (희망: ${s.preferences.join(', ')})`;
+                const prefText = s.preferences.map(p => `${p.split('-')[0]}행${p.split('-')[1]}열`).join(', ');
+                item.innerText = `${s.name} (지망: ${prefText})`;
                 listDiv.appendChild(item);
             });
         }
 
-        // 셔플 알고리즘 (공정한 무작위 섞기)
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -289,26 +438,21 @@
             }
         }
 
-        // 매칭 알고리즘 시작
         function startAssignment() {
             if (students.length === 0) {
                 alert('배정할 학생을 먼저 등록해주세요.');
                 return;
             }
 
-            // 좌석 배치 초기화
             createGrid(); 
             const allocatedSeats = new Set();
-            
-            // 1. 공정성을 위해 학생 명단을 무작위로 섞음 (우선순위 섞기)
-            let shuffledStudents = [...students];
-            shuffle(shuffledStudents);
+            let pool = students.map(s => ({ ...s, assignedSeat: null }));
 
-            // 2. 1지망부터 5지망까지 순차적으로 매칭 시도
-            for (let choice = 0; choice < 5; choice++) {
-                shuffledStudents.forEach(student => {
+            for (let choiceIndex = 0; choiceIndex < 5; choiceIndex++) {
+                shuffle(pool);
+                pool.forEach(student => {
                     if (!student.assignedSeat) {
-                        const desiredSeat = student.preferences[choice];
+                        const desiredSeat = student.preferences[choiceIndex];
                         if (!allocatedSeats.has(desiredSeat)) {
                             student.assignedSeat = desiredSeat;
                             allocatedSeats.add(desiredSeat);
@@ -317,17 +461,17 @@
                 });
             }
 
-            // 3. 지망에서 탈락한 학생들은 남은 자리에 랜덤 배정
             let allSeats = [];
             for (let r = 1; r <= ROWS; r++) {
                 for (let c = 1; c <= COLS; c++) {
                     allSeats.push(`${r}-${c}`);
                 }
             }
+            
             let remainingSeats = allSeats.filter(seat => !allocatedSeats.has(seat));
             shuffle(remainingSeats);
 
-            shuffledStudents.forEach(student => {
+            pool.forEach(student => {
                 if (!student.assignedSeat) {
                     const randomSeat = remainingSeats.pop();
                     student.assignedSeat = randomSeat;
@@ -335,25 +479,23 @@
                 }
             });
 
-            // 4. 결과를 화면에 반영
-            shuffledStudents.forEach(student => {
+            pool.forEach(student => {
                 const seatElement = document.getElementById(`seat-${student.assignedSeat}`);
                 if (seatElement) {
-                    seatElement.classList.add('assigned');
+                    seatElement.classList.add('assigned'); 
                     seatElement.querySelector('.student-name').innerText = student.name;
                 }
-                
-                // 원본 배열 데이터 동기화
-                const origin = students.find(s => s.name === student.name);
-                if(origin) origin.assignedSeat = student.assignedSeat;
+                const originalStudent = students.find(s => s.name === student.name);
+                if (originalStudent) {
+                    originalStudent.assignedSeat = student.assignedSeat;
+                }
             });
 
-            alert('좌석 배정이 완료되었습니다!  🎉');
+            alert('🥳 모든 학생의 좌석 배정이 가장 공정하고 최적화된 방식으로 완료되었습니다!');
         }
 
-        // 초기화
         function resetAll() {
-            if(confirm('모든 학생 정보와 배치 결과가 삭제됩니다. 초기화하시겠습니까?')) {
+            if (confirm('등록된 학생 명단과 배치 결과가 모두 삭제됩니다. 정말 초기화하시겠습니까?')) {
                 students = [];
                 currentPreferences = [];
                 document.getElementById('studentName').value = '';
@@ -363,7 +505,6 @@
             }
         }
 
-        // 최초 그리드 생성
         createGrid();
     </script>
 </body>
