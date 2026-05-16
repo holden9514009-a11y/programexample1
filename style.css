@@ -2,20 +2,22 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
 
 :root {
-    --bg-color: #f0f4f8;          /* 부드러운 배경 연청색 */
-    --card-bg: #ffffff;           /* 카드 배경 내부 화이트 */
-    --text-main: #2d3748;         /* 메인 글자색 (짙은 회색으로 눈을 편안하게) */
-    --text-muted: #718096;        /* 부연 설명 글자색 */
+    --bg-color: #f7f5f0;          /* 따뜻한 베이지빛 크림색 배경 */
+    --card-bg: #ffffff;           /* 카드 내부 화이트 */
+    --text-main: #4a3b32;         /* 짙은 브라운 글자색 (눈이 편안한 정돈된 톤) */
+    --text-muted: #8a7a71;        /* 부연 설명 글자색 */
     
-    /* 포인트 컬러 (소프트 & 파스텔) */
-    --primary: #6c5ce7;           /* 부드러운 보라색 (메인 버튼 및 강조) */
-    --primary-hover: #5b4bc4;     
-    --seat-select: #a29bfe;       /* 좌석 선택 시 (연보라) */
-    --success: #00b894;           /* 배정 완료 (싱그러운 민트/그린) */
-    --danger: #ff7675;            /* 초기화 버튼 (부드러운 레드) */
+    /* 🪵 나무 테마 포인트 컬러 */
+    --primary: #8c6239;           /* 따뜻한 원목 브라운 (메인 버튼 및 강조) */
+    --primary-hover: #6f4e2c;     
+    --seat-default: #fffdf9;      /* 기본 좌석 배경 (밝은 아이보리) */
+    --seat-border: #e6dfd5;       /* 기본 좌석 테두리 */
+    --seat-select: #d7ccc8;       /* 좌석 선택 시 (부드러운 라떼 색상) */
+    --success: #e28743;           /* 배정 완료 (따뜻한 오렌지 브라운) */
+    --danger: #e07a5f;            /* 초기화 버튼 (차분한 테라코타 레드) */
     
     --border-radius: 16px;        /* 둥글둥글한 느낌을 주는 라운드 값 */
-    --shadow: 0 10px 20px rgba(162, 155, 254, 0.08), 0 3px 6px rgba(0, 0, 0, 0.04);
+    --shadow: 0 10px 20px rgba(140, 98, 57, 0.05), 0 3px 6px rgba(0, 0, 0, 0.03);
 }
 
 body {
@@ -34,7 +36,7 @@ body {
 h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: #4a439f; /* 타이틀에 따뜻한 보라색 가미 */
+    color: #5c3a21; /* 타이틀에 깊은 원목 색상 적용 */
     margin-bottom: 8px;
     letter-spacing: -0.5px;
 }
@@ -64,15 +66,15 @@ p {
     box-shadow: var(--shadow);
     flex: 1;
     min-width: 340px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(230, 223, 213, 0.5);
 }
 
-/* 교탁/칠판 디자인 */
+/* 🪵 교탁/칠판 디자인: 단단한 통원목 느낌 */
 .teacher-desk {
     width: 60%;
     height: 45px;
-    background: linear-gradient(135deg, #74b9ff, #0984e3);
-    color: white;
+    background: linear-gradient(135deg, #6f4e2c, #4a321a);
+    color: #f7f5f0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,7 +82,7 @@ p {
     font-size: 15px;
     border-radius: 30px; /* 알약 모양으로 부드럽게 */
     margin: 0 auto 30px auto;
-    box-shadow: 0 4px 10px rgba(9, 132, 227, 0.2);
+    box-shadow: 0 4px 10px rgba(74, 50, 26, 0.2);
     letter-spacing: 2px;
 }
 
@@ -92,38 +94,38 @@ p {
     margin-bottom: 25px;
 }
 
-/* 기본 좌석 스타일 */
+/* 🪵 기본 좌석 스타일: 빈 책상 느낌 */
 .seat {
     aspect-ratio: 1.1;
-    border: 2px dashed #dfe6e9; /* 기본 상태는 점선으로 부드럽게 */
+    border: 2px dashed var(--seat-border); /* 기본 상태는 점선으로 부드럽게 */
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #fff;
+    background-color: var(--seat-default);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .seat:hover {
     transform: translateY(-2px);
-    border-color: var(--seat-select);
-    background-color: #f7f6ff;
+    border-color: var(--primary);
+    background-color: #fdfbf7;
 }
 
-/* 학생이 지망을 선택했을 때 (그라데이션 효과) */
+/* 🪵 학생이 지망을 선택했을 때: 라떼/소프트 브라운 톤 */
 .seat.selected {
     border-style: solid;
     border-color: var(--primary);
-    background: linear-gradient(135deg, #efecff, #e0daff);
+    background: linear-gradient(135deg, #f5ebe0, #e3d5ca);
     color: var(--primary);
-    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+    box-shadow: 0 4px 12px rgba(140, 98, 57, 0.15);
 }
 
 .seat-num {
     font-size: 11px;
-    color: #b2bec3;
+    color: #b5a69e;
     margin-bottom: 4px;
     font-weight: 500;
 }
@@ -142,33 +144,34 @@ label {
     display: block;
     margin-bottom: 8px;
     font-weight: 700;
-    color: #4a5568;
+    color: #5c4d43;
     font-size: 14px;
 }
 
 input[type="text"] {
     width: 100%;
     padding: 14px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #e6dfd5;
     border-radius: 12px;
     box-sizing: border-box;
     font-size: 15px;
     font-family: inherit;
     transition: all 0.2s;
-    background-color: #f8fafc;
+    background-color: #faf9f6;
+    color: var(--text-main);
 }
 
 input[type="text"]:focus {
     outline: none;
-    border-color: var(--seat-select);
+    border-color: var(--primary);
     background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.2);
+    box-shadow: 0 0 0 3px rgba(140, 98, 57, 0.15);
 }
 
 #selectedSequence {
     font-size: 13px;
     color: var(--primary);
-    background: #f1f0ff;
+    background: #f5ebe0;
     padding: 10px 12px;
     border-radius: 8px;
     margin-top: 5px;
@@ -187,23 +190,23 @@ button {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+    box-shadow: 0 4px 12px rgba(140, 98, 57, 0.2);
 }
 
 button:hover {
     background: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(108, 92, 231, 0.3);
+    box-shadow: 0 6px 15px rgba(140, 98, 57, 0.3);
 }
 
 button:active {
     transform: translateY(1px);
 }
 
-/* 초기화 버튼 */
+/* 초기화 버튼 (차분하고 부드러운 붉은 벽돌색) */
 button.reset-btn {
-    background: #ffeaa7;
-    color: #d63031;
+    background: #f2e9e1;
+    color: #bc4749;
     box-shadow: none;
     margin-top: 15px;
     font-size: 14px;
@@ -212,20 +215,20 @@ button.reset-btn {
 button.reset-btn:hover {
     background: var(--danger);
     color: white;
-    box-shadow: 0 4px 12px rgba(255, 118, 117, 0.2);
+    box-shadow: 0 4px 12px rgba(224, 122, 95, 0.2);
 }
 
 /* 등록된 학생 명단 상자 */
 h3 {
     font-size: 16px;
-    color: #4a5568;
+    color: #5c4d43;
     margin-top: 25px;
     margin-bottom: 10px;
 }
 
 .student-list {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background-color: #faf9f6;
+    border: 1px solid #e6dfd5;
     border-radius: 12px;
     padding: 12px;
     max-height: 180px;
@@ -234,7 +237,7 @@ h3 {
 
 .student-item {
     padding: 8px 6px;
-    border-bottom: 1px solid #edf2f7;
+    border-bottom: 1px solid #f2e9e1;
     font-size: 13px;
     color: var(--text-muted);
 }
@@ -242,14 +245,18 @@ h3 {
     border-bottom: none;
 }
 
-/* 🎉 최종 배정 완료된 좌석 스타일 (따뜻하고 싱그러운 민트) */
+/* 🎉 최종 배정 완료된 좌석 스타일: 따뜻한 황금빛 오크 나무 테마 */
 .assigned {
     border-style: solid !important;
-    background: linear-gradient(135deg, #e6f9f5, #cdf2eb) !important;
-    border-color: var(--success) !important;
-    color: #00624e !important;
-    box-shadow: 0 4px 10px rgba(0, 184, 148, 0.15);
+    background: linear-gradient(135deg, #f7d6b5, #e28743) !important;
+    border-color: #bd6320 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(226, 135, 67, 0.25);
     animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.assigned .seat-num {
+    color: rgba(255, 255, 255, 0.75) !important;
 }
 
 /* 배정 완료 시 뿅! 하고 나타나는 부드러운 애니메이션 */
